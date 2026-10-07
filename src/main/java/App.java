@@ -1,4 +1,5 @@
 import DB.Connection;
+import FileWriting.FileWriterSync;
 
 String Message() {
     return "\nWelcome to Application\n".toUpperCase();
@@ -28,16 +29,14 @@ static class PixelsUI implements Pixels {
 
 void main() {
 
-    var str1 = "%d + %d = %d";
-    var str2 = "%d - %d = %d";
-    var str3 = "%d * %d = %d";
-    var str4 = "%d / %d = %d";
-
     try {
 
+        var str1 = "%d + %d = %d";
+        var str2 = "%d - %d = %d";
+        var str3 = "%d * %d = %d";
+        var str4 = "%d / %d = %d";
         var num1 = new Random().nextInt(1, 10);
         var num2 = new Random().nextInt(1, 10);
-
         Pixels p  = PixelsUI::CountComplex;
 
         double px = 20;
@@ -49,17 +48,38 @@ void main() {
         Scanner scan = new Scanner(System.in);
         System.out.print("Enter a Type Of Operator? [1 - 4] \n");
         int s = scan.nextInt();
-        p.getPixels(py);
+
+        String formatted2 = str1.formatted(num1, num2, num2 + num2);
+        String formatted = str2.formatted(num1,  num2, num1 - num2);
+        String formatted3 = str3.formatted(num1, num2, num1 * num2);
+        String formatted4 = str4.formatted(num1, num2, num1 / num2);
+
 
         switch(s) {
 
-            case 1 -> Connection.Connect(str1.formatted(num1, num2, num2 + num2));
-            case 2 -> Connection.Connect(str2.formatted(num1, num2, num1 - num2));
-            case 3 -> Connection.Connect(str3.formatted(num1, num2, num1 * num2));
-            case 4 -> Connection.Connect(str4.formatted(num1, num2, num1 / num2));
+            case 1 -> {
+                Connection.Connect(formatted);
+                FileWriterSync.FileWriter("main.numbers.txt", formatted);
+            }
+
+            case 2 -> {
+                Connection.Connect(formatted2);
+                FileWriterSync.FileWriter("main.numbers.txt", formatted2);
+            }
+
+            case 3 -> {
+                Connection.Connect(formatted3);
+                FileWriterSync.FileWriter("main.numbers.txt", formatted3);
+            }
+
+            case 4 -> {
+                Connection.Connect(formatted4);
+                FileWriterSync.FileWriter("main.numbers.txt", formatted4);
+            }
         }
 
+        p.getPixels(py);
     } catch (Exception e) {
-        throw new RuntimeException(e);
+        System.out.print(e.getMessage());
     }
 }
